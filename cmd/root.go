@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+
+	"gitlab.com/koalalorenzo/twitch-meme-generator/twitch"
 )
 
 var rootCmd = &cobra.Command{
@@ -33,6 +33,6 @@ func init() {
 }
 
 func runApp(cmd *cobra.Command, args []string) {
-	// ToDo: we will write the code to start the server and the twitch listner
-	fmt.Println("Hello world")
+	// Start listening for messages
+	twitch.StartTwitchListner()
 }

@@ -1,5 +1,3 @@
-module gitlab.com/koalalorenzo/twitch-meme-bot
+module gitlab.com/koalalorenzo/twitch-meme-generator
 
 go 1.16
-
-require github.com/spf13/cobra v1.1.3
