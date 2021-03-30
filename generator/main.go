@@ -1,7 +1,7 @@
 package generator
 
 import (
-	"crypto/sha512"
+	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
@@ -15,16 +15,20 @@ import (
 	"github.com/jpoz/gomeme"
 )
 
-// This is a temporary directory where we will write our images
-var outputTempDir string
+var (
+	// OutputTempDir is a temporary directory where we will write our images
+	OutputTempDir string
+	//
+	urlChan chan string
+)
 
 func init() {
 	var err error
-	outputTempDir, err = os.MkdirTemp(os.TempDir(), "meme-generator")
+	OutputTempDir, err = os.MkdirTemp(os.TempDir(), "meme-generator")
 	if err != nil {
 		log.Fatalf("Error creating temp dir: %s", err.Error())
 	}
-	log.Printf("Working on directory: %s", outputTempDir)
+	log.Printf("Work Directory: %s", OutputTempDir)
 
 	MemeFiles = &[]string{}
 	tickerFilesLiveLoade()
@@ -36,11 +40,14 @@ func init() {
 	}()
 }
 
+func SetUrlChannel(ch chan string) {
+	urlChan = ch
+}
+
 // GenerateMeme does what it says
 func GenerateMeme(kind, text string) {
 	// TODO: DO IT
 	log.Printf(`[%s] %s`, kind, text)
-	log.Printf(`Memes available %s`, strings.Join(*MemeFiles, " "))
 
 	memeCfg := gomeme.NewConfig()
 	memeCfg.BottomText = text
@@ -60,14 +67,15 @@ func GenerateMeme(kind, text string) {
 
 	// Generating a "predictable output file name" so that we can cache images
 	// generated.
-	h := sha512.New()
+	h := sha1.New()
 	h.Write([]byte(kind + text))
 	hashFileName := base64.URLEncoding.EncodeToString(h.Sum(nil))
 	hashFileName = fmt.Sprintf("./%s.%s", hashFileName, fileExtension)
-	outputFile := path.Join(outputTempDir, hashFileName)
+	outputFile := path.Join(OutputTempDir, hashFileName)
 
 	if _, err := os.Stat(outputFile); !os.IsNotExist(err) {
 		log.Printf("File already exists: %s", outputFile)
+		urlChan <- hashFileName
 		return
 	}
 
@@ -101,11 +109,12 @@ func GenerateMeme(kind, text string) {
 		return
 	}
 
-	log.Printf("Saving the meme here: %s", output.Name())
-
 	err = meme.Write(output)
 	if err != nil {
 		log.Printf("Unable to create meme %s", err.Error())
 		return
 	}
+
+	log.Printf("File available: http://localhost:8001/static/%s", hashFileName)
+	urlChan <- hashFileName
 }

@@ -3,6 +3,8 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
+	"gitlab.com/koalalorenzo/twitch-meme-generator/generator"
+	"gitlab.com/koalalorenzo/twitch-meme-generator/http"
 	"gitlab.com/koalalorenzo/twitch-meme-generator/twitch"
 )
 
@@ -33,6 +35,12 @@ func init() {
 }
 
 func runApp(cmd *cobra.Command, args []string) {
+	urlChan := make(chan string, 5)
+	generator.SetUrlChannel(urlChan)
+	http.SetUrlChannel(urlChan)
+
 	// Start listening for messages
-	twitch.StartTwitchListner()
+	go twitch.StartTwitchListner()
+	// Start the HTTP server
+	http.StartServer()
 }
