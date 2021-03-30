@@ -9,8 +9,7 @@ Please follow the development live on my
 
 See it live [here](https://clips.twitch.tv/VibrantHotZucchiniAsianGlow-iTtCXFtzvn8cBljd)
 
-<iframe src="https://clips.twitch.tv/embed?clip=VibrantHotZucchiniAsianGlow-iTtCXFtzvn8cBljd&parent=www.example.com" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
-
+[![Video](https://production.assets.clips.twitchcdn.net/AT-cm%7C1113852390.mp4?sig=16b251bdbac054fe8f0674dc32a080eb363242e1&token=%7B%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22clip_uri%22%3A%22%22%2C%22device_id%22%3A%22cUjF5HLfjs2DQhdDOTcH3xrmWIwmieQm%22%2C%22expires%22%3A1617212821%2C%22user_id%22%3A%2280072417%22%2C%22version%22%3A2%7D)](https://clips.twitch.tv/VibrantHotZucchiniAsianGlow-iTtCXFtzvn8cBljd)
 
 What this Bot does:
 
