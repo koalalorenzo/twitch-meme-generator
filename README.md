@@ -41,3 +41,6 @@ make clean build -e BUILD_TARGET=rpi
 
 ### OBS Setup
 (WIP)
+
+### Adding files
+(WIP)
