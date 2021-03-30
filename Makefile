@@ -10,6 +10,7 @@ endif
 
 build:
 	go build -o build/twitch-meme-bot 
+	cp -R ./assets ./build/assets
 
 run:
 	go run ./*.go
