@@ -8,7 +8,7 @@ import (
 	"gitlab.com/koalalorenzo/twitch-meme-generator/generator"
 )
 
-var (
+const (
 	BotCommandPrefix = "!meme"
 )
 
