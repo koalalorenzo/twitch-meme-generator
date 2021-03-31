@@ -45,12 +45,14 @@ func detectFileType(in []byte) (n gomeme.Memeable, err error) {
 			return nil, err
 		}
 		return gomeme.GIF{g}, nil
+
 	case "image/jpeg":
 		j, err := jpeg.Decode(buff)
 		if err != nil {
 			return nil, err
 		}
 		return gomeme.JPEG{j}, nil
+
 	case "image/png":
 		p, err := png.Decode(buff)
 		if err != nil {
@@ -58,5 +60,6 @@ func detectFileType(in []byte) (n gomeme.Memeable, err error) {
 		}
 		return gomeme.PNG{p}, nil
 	}
+
 	return nil, errors.New("Unable to identify file type")
 }
