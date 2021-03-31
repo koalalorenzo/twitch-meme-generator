@@ -12,12 +12,12 @@ func StartTwitchListner() {
 
 	client.OnPrivateMessage(parser)
 	client.OnConnect(func() {
-		log.Print("connected")
+		log.Print("Twitch Client Connected")
 	})
 
 	client.Join("koalalorenzo")
 
-	log.Print("Connecting")
+	log.Print("Twitch Client Connecting")
 	err := client.Connect()
 	if err != nil {
 		panic(err)
