@@ -9,7 +9,8 @@ endif
 .EXPORT_ALL_VARIABLES:
 
 build:
-	go build -o build/twitch-meme-bot 
+	go build -o build/koalalorenzo-meme-generator 
+	cp -R ./assets ./build/assets
 
 run:
 	go run ./*.go
