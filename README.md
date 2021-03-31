@@ -37,7 +37,14 @@ make clean build -e BUILD_TARGET=rpi
 
 ## Usage
 ### Start the Server locally
-(WIP)
+To start the server locally you can use the built binary as in the following
+exampoe:
+
+```
+./build/koalalorenzo-meme-generator --channel koalalorenzo
+```
+
+If you need more help feel free to run the command with `--help` flag.
 
 ### OBS Setup
 (WIP)

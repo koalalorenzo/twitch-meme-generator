@@ -19,11 +19,12 @@ func init() {
 	homeTempl = template.Must(template.New("").Parse(homeHTML))
 }
 
-func SetUrlChannel(ch chan string) {
+func SetPkgConfig(ch chan string, displayTime time.Duration) {
 	urlChan = ch
+	displayTimePeriod = displayTime
 }
 
-func StartServer() {
+func StartServer(addr string) {
 	r := mux.NewRouter()
 
 	sfHandler := http.FileServer(http.Dir(generator.OutputTempDir))
@@ -34,7 +35,7 @@ func StartServer() {
 
 	srv := &http.Server{
 		Handler: r,
-		Addr:    "0.0.0.0:8001",
+		Addr:    addr,
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 20 * time.Second,
 		ReadTimeout:  20 * time.Second,

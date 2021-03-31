@@ -28,7 +28,11 @@ func init() {
 	if err != nil {
 		log.Fatalf("Error creating temp dir: %s", err.Error())
 	}
-	log.Printf("Work Directory: %s", OutputTempDir)
+}
+
+func SetPkgConfig(ch chan string, assetPath string) {
+	urlChan = ch
+	assetsDirPath = assetPath
 
 	MemeFiles = &[]string{}
 	tickerFilesLiveLoade()
@@ -38,10 +42,6 @@ func init() {
 			tickerFilesLiveLoade()
 		}
 	}()
-}
-
-func SetUrlChannel(ch chan string) {
-	urlChan = ch
 }
 
 // GenerateMeme does what it says

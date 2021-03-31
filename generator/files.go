@@ -12,9 +12,14 @@ import (
 	"github.com/jpoz/gomeme"
 )
 
+var (
+	// This is the path where we store all the images.
+	assetsDirPath string
+)
+
 func getMemesFilesData() (l []string, err error) {
 	l = []string{}
-	files, err := os.ReadDir("assets")
+	files, err := os.ReadDir(assetsDirPath)
 	if err != nil {
 		return []string{}, err
 	}

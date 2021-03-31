@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"log"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -32,6 +33,10 @@ func init() {
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmd.yaml)")
 
 	rootCmd.Flags().StringP("channel", "c", "koalalorenzo", "Channel to comnnect to")
+	rootCmd.Flags().StringP("server", "s", "0.0.0.0:8001", "address (hostname and port) to listen to")
+	rootCmd.Flags().StringP("assets", "a", "assets", "Path of the directory containing the images")
+
+	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -46,11 +51,30 @@ func runApp(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	generator.SetUrlChannel(urlChan)
-	http.SetUrlChannel(urlChan)
+	serverAddr, err := cmd.Flags().GetString("server")
+	if err != nil {
+		log.Fatalf("Unable to read the server flag value: %s", err)
+		return
+	}
+
+	assetsDirPath, err := cmd.Flags().GetString("assets")
+	if err != nil {
+		log.Fatalf("Unable to read the assets flag value: %s", err)
+		return
+	}
+
+	displayTimeDuration, err := cmd.Flags().GetDuration("display-time")
+	if err != nil {
+		log.Fatalf("Unable to read the assets flag value: %s", err)
+		return
+	}
+
+	generator.SetPkgConfig(urlChan, assetsDirPath)
+	http.SetPkgConfig(urlChan, displayTimeDuration)
 
 	// Start listening for messages
 	go twitch.StartTwitchListner(twitchChannelName)
+
 	// Start the HTTP server
-	http.StartServer()
+	http.StartServer(serverAddr)
 }
