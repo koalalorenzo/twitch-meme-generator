@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/spf13/cobra"
 
 	"gitlab.com/koalalorenzo/twitch-meme-generator/generator"
@@ -29,6 +31,8 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmd.yaml)")
 
+	rootCmd.Flags().StringP("channel", "c", "koalalorenzo", "Channel to comnnect to")
+
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
@@ -36,11 +40,17 @@ func init() {
 
 func runApp(cmd *cobra.Command, args []string) {
 	urlChan := make(chan string, 5)
+	twitchChannelName, err := cmd.Flags().GetString("channel")
+	if err != nil {
+		log.Fatalf("Unable to read the channel: %s", err)
+		return
+	}
+
 	generator.SetUrlChannel(urlChan)
 	http.SetUrlChannel(urlChan)
 
 	// Start listening for messages
-	go twitch.StartTwitchListner()
+	go twitch.StartTwitchListner(twitchChannelName)
 	// Start the HTTP server
 	http.StartServer()
 }

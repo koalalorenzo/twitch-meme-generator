@@ -63,11 +63,11 @@ const homeHTML = `<!DOCTYPE html>
 	
 									conn.onmessage = function(evt) {
 											console.log("received message:", evt.data);
-	
+											if(evt.data === "") {
+												body.style.backgroundImage = "";
+												return;
+											}
 											body.style.backgroundImage = 'url('+"http://{{.Host}}/static/" + evt.data +')'
-											setTimeout(function(){
-												body.style.backgroundImage = ""
-											}, 12000);
 									}
 								}
 

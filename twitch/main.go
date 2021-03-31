@@ -7,7 +7,7 @@ import (
 )
 
 // StartTwitchListner
-func StartTwitchListner() {
+func StartTwitchListner(channel string) {
 	client := twitch.NewAnonymousClient()
 
 	client.OnPrivateMessage(parser)
@@ -15,7 +15,7 @@ func StartTwitchListner() {
 		log.Print("Twitch Client Connected")
 	})
 
-	client.Join("koalalorenzo")
+	client.Join(channel)
 
 	log.Print("Twitch Client Connecting")
 	err := client.Connect()
