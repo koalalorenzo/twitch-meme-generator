@@ -11,5 +11,4 @@ require (
 	github.com/jpoz/gomeme v0.0.0-20170818233234-d0804994c9b4
 	github.com/spf13/cobra v1.1.3
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
-	google.golang.org/appengine v1.6.1 // indirect
 )

@@ -12,35 +12,29 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "twitch-meme-bot",
-	Short: "A Twitch Bot that generates meme",
+	Use:   "koalalorenzo-meme-generator",
+	Short: "Koalalorenzo's Twitch Bot that generates meme for your stream",
 	Long: `Run a server and a twitch bot capable of generating memes and display them
-on a HTTP page.`,
+on a HTTP page.
+
+Author: https://who.is.lorenzo.setale.me/?
+Twitch Channel: https://twitch.tv/koalalorenzo
+Source: https://gitlab.com/koalalorenzo/twitch-meme-generator
+License: https://gitlab.com/koalalorenzo/twitch-meme-generator/-/blob/main/LICENSE
+`,
 	Run: runApp,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmd.yaml)")
+	rootCmd.Flags().StringP("assets", "a", "assets", "Path of the directory containing the images")
 
 	rootCmd.Flags().StringP("channel", "c", "koalalorenzo", "Channel to comnnect to")
 	rootCmd.Flags().StringP("server", "s", "0.0.0.0:8001", "address (hostname and port) to listen to")
-	rootCmd.Flags().StringP("assets", "a", "assets", "Path of the directory containing the images")
-
 	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func runApp(cmd *cobra.Command, args []string) {

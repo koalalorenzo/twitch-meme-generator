@@ -79,6 +79,12 @@ where:
 - `extension` is the image format. 
   It can be one of the following: `gif`, `png`, `jpeg` or `jpg`.
 
+You can test the meme by running `generate` subcommand:
+
+```bash
+./build/koalalorenzo-meme-generator generate deal Dogs are cool, DEAL WITH IT
+```
+
 ### Chat usage
 The server  is connected to the Twitch Channel (IRC channel) using an anonymous
 client. Therefore is not capable of announcing himself in the chat.
@@ -99,6 +105,7 @@ For example:
 Will display in the Browser source for a few seconds the following image:
 
 ![Picture of a cat master](example.jpg)
+
 
 ## Deploy on Heroku
 (WIP)
