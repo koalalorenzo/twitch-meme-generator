@@ -12,10 +12,16 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "twitch-meme-bot",
-	Short: "A Twitch Bot that generates meme",
+	Use:   "koalalorenzo-meme-generator",
+	Short: "Koalalorenzo's Twitch Bot that generates meme for your stream",
 	Long: `Run a server and a twitch bot capable of generating memes and display them
-on a HTTP page.`,
+on a HTTP page.
+
+Author: https://who.is.lorenzo.setale.me/?
+Twitch Channel: https://twitch.tv/koalalorenzo
+Source: https://gitlab.com/koalalorenzo/twitch-meme-generator
+License: https://gitlab.com/koalalorenzo/twitch-meme-generator/-/blob/main/LICENSE
+`,
 	Run: runApp,
 }
 
