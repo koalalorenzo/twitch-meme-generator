@@ -3,9 +3,10 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"path"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -56,5 +57,5 @@ func runGenerate(cmd *cobra.Command, args []string) {
 
 	newFileName := fmt.Sprintf("%s%s", memeKind, path.Ext(tempFilePath))
 	ioutil.WriteFile(newFileName, tmpFileContent, 0644)
-	log.Printf("New file created at %s", newFileName)
+	log.Infof("New file created at %s", newFileName)
 }

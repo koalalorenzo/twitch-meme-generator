@@ -1,7 +1,7 @@
 package twitch
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 
 	twitch "github.com/gempir/go-twitch-irc/v2"
 )

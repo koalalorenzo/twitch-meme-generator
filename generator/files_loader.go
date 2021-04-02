@@ -1,8 +1,9 @@
 package generator
 
 import (
-	"log"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // MemeFiles these are the file names of the memes available from the bot
@@ -11,12 +12,12 @@ var MemeFiles *[]string
 func tickerFilesLiveLoade() {
 	mfs, err := getMemesFilesData()
 	if err != nil {
-		log.Panicf("Erorr loading files: %s", err.Error())
+		log.Errorf("Erorr loading files: %s", err.Error())
 	}
 
 	mfsstrign := strings.Join(mfs, ", ")
 	if mfsstrign != strings.Join(*MemeFiles, ", ") {
-		log.Printf("Loaded memes: %s", strings.Join(mfs, ", "))
+		log.Debugf("Loaded memes: %s", strings.Join(mfs, ", "))
 	}
 	MemeFiles = &mfs
 }

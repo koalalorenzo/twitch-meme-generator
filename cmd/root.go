@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -34,6 +35,14 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initViperEnvConfig)
 
+	// Set common Flags
+	rootCmd.PersistentFlags().StringP("loglevel", "l", "info", "sets log level to warn, info or debug")
+	viper.BindPFlag("loglevel", rootCmd.PersistentFlags().Lookup("loglevel"))
+
+	rootCmd.PersistentFlags().StringP("logformat", "f", "text", "sets log format to json or text")
+	viper.BindPFlag("logformat", rootCmd.PersistentFlags().Lookup("logformat"))
+
+	// Sets common
 	rootCmd.Flags().StringP("assets", "a", "assets", "Path of the directory containing the images")
 	viper.BindPFlag("assets", rootCmd.Flags().Lookup("assets"))
 
@@ -55,6 +64,20 @@ func initViperEnvConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	}
+
+	switch viper.GetString("logformat") {
+	case "json":
+		log.SetFormatter(&log.JSONFormatter{})
+	}
+
+	switch viper.GetString("loglevel") {
+	case "debug":
+		log.SetLevel(log.DebugLevel)
+	case "warn":
+		log.SetLevel(log.WarnLevel)
+	default:
+		log.SetLevel(log.InfoLevel)
 	}
 }
 

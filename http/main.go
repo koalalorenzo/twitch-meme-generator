@@ -1,10 +1,11 @@
 package http
 
 import (
-	"log"
 	"net/http"
 	"text/template"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gorilla/mux"
 
