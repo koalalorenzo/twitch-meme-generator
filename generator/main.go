@@ -48,7 +48,7 @@ func SetPkgConfig(ch chan string, assetPath string) {
 // GenerateMeme does what it says
 func GenerateMeme(kind, text string) {
 	logWF := log.WithFields(log.Fields{
-		"f":    "GenerateMeme",
+		"f":    "generator.GenerateMeme",
 		"kind": kind,
 		"text": text,
 	})
@@ -87,13 +87,8 @@ func GenerateMeme(kind, text string) {
 	hashFileName = fmt.Sprintf("./%s.%s", hashFileName, fileExtension)
 	outputFile := path.Join(OutputTempDir, hashFileName)
 
-	// Updating the logs with output file path
-	logWF = logWF.WithFields(log.Fields{
-		"outputFile": outputFile,
-	})
-
 	if _, err := os.Stat(outputFile); !os.IsNotExist(err) {
-		log.Debugf("File already exists: %s", outputFile)
+		logWF.Debugf("File already exists: %s", outputFile)
 		urlChan <- hashFileName
 		return
 	}
@@ -101,7 +96,7 @@ func GenerateMeme(kind, text string) {
 	// Ensuring that the font size is the one specified after the  first dot
 	fontSize, err := strconv.ParseFloat(fontSizeStr, 64)
 	if err != nil {
-		log.Warnf("Error defining the fontSize: %s", err.Error())
+		logWF.Warnf("Error defining the fontSize: %s", err.Error())
 		return
 	}
 	memeCfg.FontSize = fontSize
@@ -111,30 +106,30 @@ func GenerateMeme(kind, text string) {
 
 	memeFile, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.Warn("Error Opening %s: %s", fileName, err.Error())
+		logWF.Warn("Error Opening %s: %s", fileName, err.Error())
 		return
 	}
 
 	meme.Memeable, err = detectFileType(memeFile)
 	if err != nil {
-		log.Warnf("Error making meme meemable: %s", err.Error())
+		logWF.Warnf("Error making meme meemable: %s", err.Error())
 		return
 	}
 
 	output, err := os.Create(outputFile)
 	//ioutil.TempFile(os.TempDir(), "meme-")
 	if err != nil {
-		log.Warnf("Error creating temporary file: %s", err.Error())
+		logWF.Warnf("Error creating temporary file: %s", err.Error())
 		return
 	}
 
 	err = meme.Write(output)
 	if err != nil {
-		log.Warnf("Unable to create meme %s", err.Error())
+		logWF.Warnf("Unable to create meme %s", err.Error())
 		return
 	}
 
-	log.Debugf("File available: http://localhost:8001/static/%s", hashFileName)
-	log.Infof("Generated")
+	logWF.Debugf("File available: http://localhost:8001/static/%s", hashFileName)
+	logWF.Infof("Generated")
 	urlChan <- hashFileName
 }

@@ -5,11 +5,21 @@ import (
 	"strconv"
 	"text/template"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var homeTempl *template.Template
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
+	logWF := log.WithFields(log.Fields{
+		"f":          "http.serveWs",
+		"RemoteAddr": r.RemoteAddr,
+		// "Host":       r.Host,
+		// "UserAgent":  r.UserAgent(),
+		"path": r.RequestURI,
+	})
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Preparing values for our HTML template
@@ -21,6 +31,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 		strconv.FormatInt(time.Now().UnixNano(), 16),
 	}
 
+	logWF.Infof("")
 	homeTempl.Execute(w, &v)
 }
 

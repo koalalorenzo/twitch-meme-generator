@@ -52,7 +52,9 @@ to use:
 - Width: 800
 - Height: 600
 
-By default this url will be `http://localhost:8001/` or `http://0.0.0.0:8001`.
+By default this url will be [http://localhost:8001/](http://localhost:8001/).
+If you are running on a different platform like Heroku or DigitalOcean please
+use the URL provided by those platforms.
 
 Remember to enable the following options: 
   - Refresh browser when scene becomes active

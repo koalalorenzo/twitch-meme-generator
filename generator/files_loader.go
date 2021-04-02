@@ -10,14 +10,19 @@ import (
 var MemeFiles *[]string
 
 func tickerFilesLiveLoade() {
+	logWF := log.WithFields(log.Fields{
+		"f":      "generator.tickerFilesLiveLoade",
+		"assets": assetsDirPath,
+	})
+
 	mfs, err := getMemesFilesData()
 	if err != nil {
-		log.Errorf("Erorr loading files: %s", err.Error())
+		logWF.Errorf("Erorr loading files: %s", err.Error())
 	}
 
 	mfsstrign := strings.Join(mfs, ", ")
 	if mfsstrign != strings.Join(*MemeFiles, ", ") {
-		log.Debugf("Loaded memes: %s", strings.Join(mfs, ", "))
+		logWF.Debugf("Loaded memes: %s", strings.Join(mfs, ", "))
 	}
 	MemeFiles = &mfs
 }

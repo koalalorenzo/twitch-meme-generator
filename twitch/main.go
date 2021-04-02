@@ -8,16 +8,21 @@ import (
 
 // StartTwitchListner
 func StartTwitchListner(channel string) {
+	logWF := log.WithFields(log.Fields{
+		"f":       "twitch.StartTwitchListner",
+		"channel": channel,
+	})
+
 	client := twitch.NewAnonymousClient()
 
 	client.OnPrivateMessage(parser)
 	client.OnConnect(func() {
-		log.Printf("Twitch Client Connected to channel %s", channel)
+		logWF.Info("Twitch Client Connected")
 	})
 
 	client.Join(channel)
 
-	log.Print("Twitch Client Connecting")
+	logWF.Debug("Twitch Client Connecting")
 	err := client.Connect()
 	if err != nil {
 		panic(err)

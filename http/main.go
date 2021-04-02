@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"text/template"
 	"time"
@@ -26,6 +27,11 @@ func SetPkgConfig(ch chan string, displayTime time.Duration) {
 }
 
 func StartServer(addr string) {
+	logWF := log.WithFields(log.Fields{
+		"f":    "http.StartServer",
+		"addr": fmt.Sprintf("http://%s", addr),
+	})
+
 	r := mux.NewRouter()
 
 	sfHandler := http.FileServer(http.Dir(generator.OutputTempDir))
@@ -42,6 +48,6 @@ func StartServer(addr string) {
 		ReadTimeout:  20 * time.Second,
 	}
 
-	log.Printf("Using http://%s", srv.Addr)
+	logWF.Infof("Starting HTTP Server")
 	log.Fatal(srv.ListenAndServe())
 }
