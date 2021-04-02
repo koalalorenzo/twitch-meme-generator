@@ -40,7 +40,7 @@ exampoe:
 
 If you need more help feel free to run the command with `--help` flag.
 Have a look at it because you can customize things like display time and 
-host address (default to: `0.0.0.0:8001`).
+host address (default to: `0.0.0.0:8000`).
 
 ### OBS Setup
 Once the server is listening and ready you can load a new Browser Source in
@@ -52,7 +52,7 @@ to use:
 - Width: 800
 - Height: 600
 
-By default this url will be [http://localhost:8001/](http://localhost:8001/).
+By default this url will be [http://localhost:8000/](http://localhost:8000/).
 If you are running on a different platform like Heroku or DigitalOcean please
 use the URL provided by those platforms.
 
