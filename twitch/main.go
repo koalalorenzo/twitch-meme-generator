@@ -12,7 +12,7 @@ func StartTwitchListner(channel string) {
 
 	client.OnPrivateMessage(parser)
 	client.OnConnect(func() {
-		log.Print("Twitch Client Connected")
+		log.Printf("Twitch Client Connected to channel %s", channel)
 	})
 
 	client.Join(channel)
