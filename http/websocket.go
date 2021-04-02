@@ -89,6 +89,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	logWF := log.WithFields(log.Fields{
 		"f":          "http.serveWs",
 		"RemoteAddr": r.RemoteAddr,
+		"URI":        r.RequestURI,
 	})
 
 	log.Infof("New WebSocket connection")

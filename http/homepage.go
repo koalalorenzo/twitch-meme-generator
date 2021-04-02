@@ -13,11 +13,11 @@ var homeTempl *template.Template
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	logWF := log.WithFields(log.Fields{
-		"f":          "http.serveWs",
+		"f":          "http.serveHome",
 		"RemoteAddr": r.RemoteAddr,
 		// "Host":       r.Host,
-		// "UserAgent":  r.UserAgent(),
-		"path": r.RequestURI,
+		"UserAgent": r.UserAgent(),
+		"URI":       r.RequestURI,
 	})
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
