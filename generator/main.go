@@ -5,12 +5,13 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path"
 	"strconv"
 	"strings"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/jpoz/gomeme"
 )
@@ -26,7 +27,7 @@ func init() {
 	var err error
 	OutputTempDir, err = os.MkdirTemp(os.TempDir(), "meme-generator")
 	if err != nil {
-		log.Fatalf("Error creating temp dir: %s", err.Error())
+		log.Errorf("Error creating temp dir: %s", err.Error())
 	}
 }
 
@@ -46,15 +47,21 @@ func SetPkgConfig(ch chan string, assetPath string) {
 
 // GenerateMeme does what it says
 func GenerateMeme(kind, text string) {
+	logWF := log.WithFields(log.Fields{
+		"f":    "generator.GenerateMeme",
+		"kind": kind,
+		"text": text,
+	})
+
 	// TODO: DO IT
-	log.Printf(`[%s] %s`, kind, text)
+	logWF.Infof(`Generating...`)
 
 	memeCfg := gomeme.NewConfig()
 	memeCfg.BottomText = text
 
 	var fontSizeStr string
-	fileName := "assets/wink.jpg"
-	fileExtension := "jpg"
+	var fileName string
+	var fileExtension string
 	for _, mfn := range *MemeFiles {
 		if strings.HasPrefix(mfn, kind) {
 			fileName = fmt.Sprintf("assets/%s", mfn)
@@ -65,6 +72,13 @@ func GenerateMeme(kind, text string) {
 		}
 	}
 
+	// Updating the logs with relevant extra Fields
+	logWF = logWF.WithFields(log.Fields{
+		"fontSize":      fontSizeStr,
+		"fileName":      fileName,
+		"fileExtension": fileExtension,
+	})
+
 	// Generating a "predictable output file name" so that we can cache images
 	// generated.
 	h := sha1.New()
@@ -74,7 +88,7 @@ func GenerateMeme(kind, text string) {
 	outputFile := path.Join(OutputTempDir, hashFileName)
 
 	if _, err := os.Stat(outputFile); !os.IsNotExist(err) {
-		log.Printf("File already exists: %s", outputFile)
+		logWF.Debugf("File already exists: %s", outputFile)
 		urlChan <- hashFileName
 		return
 	}
@@ -82,7 +96,7 @@ func GenerateMeme(kind, text string) {
 	// Ensuring that the font size is the one specified after the  first dot
 	fontSize, err := strconv.ParseFloat(fontSizeStr, 64)
 	if err != nil {
-		log.Printf("Error defining the fontSize: %s", err.Error())
+		logWF.Warnf("Error defining the fontSize: %s", err.Error())
 		return
 	}
 	memeCfg.FontSize = fontSize
@@ -92,29 +106,30 @@ func GenerateMeme(kind, text string) {
 
 	memeFile, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.Printf("Error Opening %s: %s", fileName, err.Error())
+		logWF.Warn("Error Opening %s: %s", fileName, err.Error())
 		return
 	}
 
 	meme.Memeable, err = detectFileType(memeFile)
 	if err != nil {
-		log.Printf("Error making meme meemable: %s", err.Error())
+		logWF.Warnf("Error making meme meemable: %s", err.Error())
 		return
 	}
 
 	output, err := os.Create(outputFile)
 	//ioutil.TempFile(os.TempDir(), "meme-")
 	if err != nil {
-		log.Printf("Error creating temporary file: %s", err.Error())
+		logWF.Warnf("Error creating temporary file: %s", err.Error())
 		return
 	}
 
 	err = meme.Write(output)
 	if err != nil {
-		log.Printf("Unable to create meme %s", err.Error())
+		logWF.Warnf("Unable to create meme %s", err.Error())
 		return
 	}
 
-	log.Printf("File available: http://localhost:8001/static/%s", hashFileName)
+	logWF.Debugf("File available: http://localhost:8001/static/%s", hashFileName)
+	logWF.Infof("Generated")
 	urlChan <- hashFileName
 }

@@ -1,9 +1,10 @@
 package http
 
 import (
-	"log"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gorilla/websocket"
 )
@@ -85,11 +86,17 @@ func writer(ws *websocket.Conn) {
 }
 
 func serveWs(w http.ResponseWriter, r *http.Request) {
-	log.Print("New WebSocket connection")
+	logWF := log.WithFields(log.Fields{
+		"f":          "http.serveWs",
+		"RemoteAddr": r.RemoteAddr,
+		"URI":        r.RequestURI,
+	})
+
+	log.Infof("New WebSocket connection")
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		if _, ok := err.(websocket.HandshakeError); !ok {
-			log.Println(err)
+			logWF.Warn(err)
 		}
 		return
 	}

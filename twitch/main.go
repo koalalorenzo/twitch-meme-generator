@@ -1,23 +1,28 @@
 package twitch
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 
 	twitch "github.com/gempir/go-twitch-irc/v2"
 )
 
 // StartTwitchListner
 func StartTwitchListner(channel string) {
+	logWF := log.WithFields(log.Fields{
+		"f":       "twitch.StartTwitchListner",
+		"channel": channel,
+	})
+
 	client := twitch.NewAnonymousClient()
 
 	client.OnPrivateMessage(parser)
 	client.OnConnect(func() {
-		log.Print("Twitch Client Connected")
+		logWF.Info("Twitch Client Connected")
 	})
 
 	client.Join(channel)
 
-	log.Print("Twitch Client Connecting")
+	logWF.Debug("Twitch Client Connecting")
 	err := client.Connect()
 	if err != nil {
 		panic(err)

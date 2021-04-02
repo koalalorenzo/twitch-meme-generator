@@ -3,11 +3,13 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"path"
 	"strings"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"gitlab.com/koalalorenzo/twitch-meme-generator/generator"
 )
@@ -31,14 +33,11 @@ Will generate a new image using the "cat" file with the text "hello human".
 func init() {
 	rootCmd.AddCommand(generateCmd)
 	generateCmd.Flags().StringP("assets", "a", "assets", "Path of the directory containing the images")
+	viper.BindPFlag("assets", generateCmd.Flags().Lookup("assets"))
 }
 
 func runGenerate(cmd *cobra.Command, args []string) {
-	assetsDirPath, err := cmd.Flags().GetString("assets")
-	if err != nil {
-		log.Fatalf("Unable to read the assets flag value: %s", err)
-		return
-	}
+	assetsDirPath := viper.GetString("assets")
 
 	urlChan := make(chan string, 1)
 	memeKind := args[0]
@@ -58,5 +57,5 @@ func runGenerate(cmd *cobra.Command, args []string) {
 
 	newFileName := fmt.Sprintf("%s%s", memeKind, path.Ext(tempFilePath))
 	ioutil.WriteFile(newFileName, tmpFileContent, 0644)
-	log.Printf("New file created at %s", newFileName)
+	log.Infof("New file created at %s", newFileName)
 }
