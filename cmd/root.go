@@ -53,7 +53,7 @@ func init() {
 	viper.BindPFlag("server", rootCmd.Flags().Lookup("server"))
 
 	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
-	viper.BindPFlag("server", rootCmd.Flags().Lookup("server"))
+	viper.BindPFlag("display_time", rootCmd.Flags().Lookup("display-time"))
 }
 
 func initViperEnvConfig() {
@@ -79,6 +79,9 @@ func initViperEnvConfig() {
 	default:
 		log.SetLevel(log.InfoLevel)
 	}
+
+	// Show debug configuration
+	log.WithFields(log.Fields(viper.AllSettings())).Debug("configuration")
 }
 
 func runApp(cmd *cobra.Command, args []string) {
@@ -86,7 +89,7 @@ func runApp(cmd *cobra.Command, args []string) {
 	twitchChannelName := viper.GetString("channel")
 	serverAddr := viper.GetString("server")
 	assetsDirPath := viper.GetString("assets")
-	displayTimeDuration := viper.GetDuration("display-time")
+	displayTimeDuration := viper.GetDuration("display_time")
 
 	generator.SetPkgConfig(urlChan, assetsDirPath)
 	http.SetPkgConfig(urlChan, displayTimeDuration)
