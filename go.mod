@@ -1,6 +1,7 @@
 module gitlab.com/koalalorenzo/twitch-meme-generator
 
 go 1.16
+// +heroku goVersion go1.16
 
 require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
