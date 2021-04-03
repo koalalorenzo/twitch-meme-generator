@@ -96,6 +96,7 @@ func initViperEnvConfig() {
 
 func runApp(cmd *cobra.Command, args []string) {
 	urlChan := make(chan string, 5)
+
 	twitchChannelName := viper.GetString("channel")
 	host := viper.GetString("host")
 	port := viper.GetString("port")

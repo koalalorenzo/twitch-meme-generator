@@ -1,6 +1,7 @@
 module gitlab.com/koalalorenzo/twitch-meme-generator
 
 go 1.16
+
 // +heroku goVersion go1.16
 
 require (
@@ -21,7 +22,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
-	golang.org/x/sys v0.0.0-20210331175145-43e1dd70ce54 // indirect
+	golang.org/x/sys v0.0.0-20210402192133-700132347e07 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )
