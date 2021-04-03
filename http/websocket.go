@@ -47,7 +47,7 @@ func reader(ws *websocket.Conn) {
 	}
 }
 
-func writer(ws *websocket.Conn) {
+func writer(ws *websocket.Conn, msgChan chan string) {
 	pingTicker := time.NewTicker(pingPeriod)
 
 	defer func() {
@@ -57,7 +57,7 @@ func writer(ws *websocket.Conn) {
 
 	for {
 		select {
-		case url := <-urlChan:
+		case url := <-msgChan:
 			// Send instantly the new image
 			ws.SetWriteDeadline(time.Now().Add(writeWait))
 
@@ -100,6 +100,11 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	go writer(ws)
+
+	// Add a new channel that will receive the memes for this web socket.
+	wsChannel := make(chan string, 5)
+	WSListnerChannels = append(WSListnerChannels, wsChannel)
+
+	go writer(ws, wsChannel)
 	reader(ws)
 }

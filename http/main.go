@@ -48,6 +48,8 @@ func StartServer(addr string) {
 		ReadTimeout:  20 * time.Second,
 	}
 
+	go channelPipe(urlChan)
+
 	logWF.Infof("Starting HTTP Server")
 	log.Fatal(srv.ListenAndServe())
 }

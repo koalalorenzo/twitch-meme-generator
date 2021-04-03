@@ -40,7 +40,7 @@ exampoe:
 
 If you need more help feel free to run the command with `--help` flag.
 Have a look at it because you can customize things like display time and 
-host address (default to: `0.0.0.0:8001`).
+host address (default to: `0.0.0.0:8000`).
 
 ### OBS Setup
 Once the server is listening and ready you can load a new Browser Source in
@@ -52,17 +52,17 @@ to use:
 - Width: 800
 - Height: 600
 
-By default this url will be [http://localhost:8001/](http://localhost:8001/).
+By default this url will be [http://localhost:8000/](http://localhost:8000/).
 If you are running on a different platform like Heroku or DigitalOcean please
 use the URL provided by those platforms.
 
-Remember to enable the following options: 
+Remember to have dibled the following options: 
   - Refresh browser when scene becomes active
   - Shutdown source when not visible
 
 The reason is this that this uses WebSockets and it is better to no have 
 _multiple listners_ at the same time (aka: reuse the same source by 
-_Copy Reference_)
+_Copy Reference_). In case of issues the web page should reconnect automagically
 
 ### Adding files
 You can add files any time into the `assets` directory (please note that the
@@ -110,4 +110,19 @@ Will display in the Browser source for a few seconds the following image:
 
 
 ## Deploy on Heroku
-(WIP)
+
+To quickly deploy on Heroku you can click on the following button and follow
+the instructions:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/koalalorenzo/twitch-meme-generator/tree/main)
+
+Follow the instructions and remember to customize the twitch channel and display
+time as env variables.
+
+**Important**: Please note that the name of the application will impact on the
+URL that will be used in the OBS Browser Source. Do not share this URL/address
+with anybody and try to keep it hard to find. (_hint_: try adding random
+characters in the name might help)
+
+**Important**: Due to security restrictions on some browser, using HTTP instead
+of HTTPs in the OBS Browser Source URL will fix connectivity issues.

@@ -49,11 +49,14 @@ func init() {
 	rootCmd.Flags().StringP("channel", "c", "koalalorenzo", "Channel to comnnect to")
 	viper.BindPFlag("channel", rootCmd.Flags().Lookup("channel"))
 
-	rootCmd.Flags().StringP("server", "s", "0.0.0.0:8001", "address (hostname and port) to listen to")
-	viper.BindPFlag("server", rootCmd.Flags().Lookup("server"))
+	rootCmd.Flags().String("host", "0.0.0.0", "sets the Host to listen to (HTTP)")
+	viper.BindPFlag("host", rootCmd.Flags().Lookup("host"))
+
+	rootCmd.Flags().StringP("port", "p", "8000", "sets the port to listen to (HTTP)")
+	viper.BindPFlag("port", rootCmd.Flags().Lookup("port"))
 
 	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
-	viper.BindPFlag("server", rootCmd.Flags().Lookup("server"))
+	viper.BindPFlag("display_time", rootCmd.Flags().Lookup("display-time"))
 }
 
 func initViperEnvConfig() {
@@ -79,14 +82,26 @@ func initViperEnvConfig() {
 	default:
 		log.SetLevel(log.InfoLevel)
 	}
+
+	// Get the PORT env variable (required by Heroku). This is required because
+	// we have a perfix KTMG
+	herokuPortEnv := os.Getenv("PORT")
+	if herokuPortEnv != "" {
+		viper.Set("port", herokuPortEnv)
+	}
+
+	// Show debug configuration
+	log.WithFields(log.Fields(viper.AllSettings())).Debug("configuration")
 }
 
 func runApp(cmd *cobra.Command, args []string) {
 	urlChan := make(chan string, 5)
+
 	twitchChannelName := viper.GetString("channel")
-	serverAddr := viper.GetString("server")
+	host := viper.GetString("host")
+	port := viper.GetString("port")
 	assetsDirPath := viper.GetString("assets")
-	displayTimeDuration := viper.GetDuration("display-time")
+	displayTimeDuration := viper.GetDuration("display_time")
 
 	generator.SetPkgConfig(urlChan, assetsDirPath)
 	http.SetPkgConfig(urlChan, displayTimeDuration)
@@ -95,5 +110,6 @@ func runApp(cmd *cobra.Command, args []string) {
 	go twitch.StartTwitchListner(twitchChannelName)
 
 	// Start the HTTP server
+	serverAddr := fmt.Sprintf("%s:%s", host, port)
 	http.StartServer(serverAddr)
 }

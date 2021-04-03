@@ -1,0 +1,31 @@
+{
+  "name": "Koalalorenzo's Twitch Meme Generator",
+  "description": "Twitch bot that generates meme on the fly for Streamers",
+  "keywords": [
+    "twitch",
+    "meme",
+    "generator",
+    "twitch-bot",
+    "images",
+    "go"
+  ],
+  "website": "https://gitlab.com/koalalorenzo/twitch-meme-generator",
+  "repository": "https://gitlab.com/koalalorenzo/twitch-meme-generator",
+  "success_url": "/",
+  "env": {
+    "KTMG_CHANNEL": {
+      "description": "Name of the Twitch channel to monitor",
+      "value": "koalalorenzo"
+    },
+    "KTMG_DISPLAY_TIME": {
+      "description": "The amount of time an image should appear",
+      "value": "10s"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
