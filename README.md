@@ -56,13 +56,13 @@ By default this url will be [http://localhost:8000/](http://localhost:8000/).
 If you are running on a different platform like Heroku or DigitalOcean please
 use the URL provided by those platforms.
 
-Remember to enable the following options: 
+Remember to have dibled the following options: 
   - Refresh browser when scene becomes active
   - Shutdown source when not visible
 
 The reason is this that this uses WebSockets and it is better to no have 
 _multiple listners_ at the same time (aka: reuse the same source by 
-_Copy Reference_)
+_Copy Reference_). In case of issues the web page should reconnect automagically
 
 ### Adding files
 You can add files any time into the `assets` directory (please note that the
