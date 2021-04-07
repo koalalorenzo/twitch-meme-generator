@@ -59,7 +59,6 @@ const homeHTML = `<!DOCTYPE html>
             (function() {
 								var conn;
 							  var body = document.body;
-								lastUpdated = Date.Now();
 								body.style.height = window.innerHeight - 50 + "px";
 								body.style.height = window.innerHeight - 50 + "px";
 
@@ -69,19 +68,17 @@ const homeHTML = `<!DOCTYPE html>
 										body.style.backgroundImage = "";
 										return;
 									}
-									lastUpdated = Date.now();
 									body.style.backgroundImage = 'url('+"http://{{.Host}}/static/" + url +')';
 								}
 
 								function startWebSocket() {
-									console.log("Starting a new connection")
+									console.log("Starting a new connection");
+									// Clean the image in case there is one showing...
+									setImage("");
 									var conn = new WebSocket("ws://{{.Host}}/ws?lastMod={{.LastMod}}");
 									
 									conn.onclose = function(evt) {
 										console.log("Connection closed... Reconnecting...")
-										// Clean the image in case there is one showing...
-										setImage("");
-										// Try to reconnect...
 										setTimeout(function(){
 											startWebSocket();
 										}, 5000);
