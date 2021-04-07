@@ -62,23 +62,31 @@ const homeHTML = `<!DOCTYPE html>
 								body.style.height = window.innerHeight - 50 + "px";
 								body.style.height = window.innerHeight - 50 + "px";
 
+								function setImage(url) {
+									// Clear the image if empty
+									if(url === "") {
+										body.style.backgroundImage = "";
+										return;
+									}
+									body.style.backgroundImage = 'url('+"http://{{.Host}}/static/" + url +')';
+								}
+
 								function startWebSocket() {
-									console.log("starting the baby");
+									console.log("Starting a new connection");
+									// Clean the image in case there is one showing...
+									setImage("");
 									var conn = new WebSocket("ws://{{.Host}}/ws?lastMod={{.LastMod}}");
 									
 									conn.onclose = function(evt) {
+										console.log("Connection closed... Reconnecting...")
 										setTimeout(function(){
 											startWebSocket();
 										}, 5000);
 									}
 	
 									conn.onmessage = function(evt) {
-											console.log("received message:", evt.data);
-											if(evt.data === "") {
-												body.style.backgroundImage = "";
-												return;
-											}
-											body.style.backgroundImage = 'url('+"http://{{.Host}}/static/" + evt.data +')'
+										console.log("Received new Image filename:", evt.data);
+										setImage(evt.data);
 									}
 								}
 
