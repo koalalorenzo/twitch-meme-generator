@@ -13,7 +13,10 @@ build:
 	cp -R ./assets ./build/assets
 
 run:
-	go run ./*.go
+	go run ./*.go 
+
+install:
+	go install 
 
 clean:
 	rm -rf build
