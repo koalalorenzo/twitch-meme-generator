@@ -89,7 +89,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		"URI":        r.RequestURI,
 	})
 
-	log.Infof("New WebSocket connection")
+	logWF.Infof("New WebSocket connection")
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		if _, ok := err.(websocket.HandshakeError); !ok {
