@@ -37,13 +37,10 @@
     },
     "HEROKU_BUILDPACK_GIT_LFS_REPO": {
       "description": "Git LFS repository. Leve default if you don't know what this is",
-      "value": "git@gitlab.com:koalalorenzo/twitch-meme-generator.git"
+      "value": "https://github.com/koalalorenzo/twitch-meme-generator.git"
     }
   },
   "buildpacks": [
-    {
-      "url": "https://github.com/heroku/heroku-buildpack-ssh-key.git"
-    },
     {
       "url": "https://github.com/raxod502/heroku-buildpack-git-lfs.git"
     },
