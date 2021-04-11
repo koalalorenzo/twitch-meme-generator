@@ -108,6 +108,35 @@ Will display in the Browser source for a few seconds the following image:
 
 ![Picture of a cat master](example.jpg)
 
+### WebHook usage
+It is possible to set up a custom webhook that will queue memes and show them.
+This is useful if you want to hook up some other tools or manually generate 
+memes without using the chat (ex: From Apple Shortcuts or from `curl` for 
+testing).
+
+By default the webhook is disabled, to enable it you can pass the flag 
+`--webhook-enable` to `true` or set the env variable `KTMG_WEBHOOK_ENABLE=true`.
+This endpoint can be _protected_ by basic http authentication. Please use
+`--help` flag to check all the options availalbe.
+
+For example if I set the following env variables and run the app:
+
+```bash
+export KTMG_LOGLEVEL=debug
+export KTMG_WEBHOOK_ENABLE=true
+export KTMG_WEBHOOK_USERNAME=koalalorenzo
+export KTMG_WEBHOOK_USERNAME=SuperSecretPassword
+./build/koalalorenzo-meme-generator
+```
+
+I will then be able to queue memes to be generated on the fly by running 
+http POST request to the endpoint `/wh`, like this:
+
+```bash
+curl http://127.0.0.1:8000/wh \
+  -X POST --data '{ "kind":"pathetic", "text":"Humans? Pathetic servants"}' \
+  -u koalalorenzo:SuperSecretPassword
+```
 
 ## Deploy on Heroku
 
