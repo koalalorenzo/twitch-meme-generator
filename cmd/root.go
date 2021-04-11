@@ -57,6 +57,15 @@ func init() {
 
 	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
 	viper.BindPFlag("display_time", rootCmd.Flags().Lookup("display-time"))
+
+	rootCmd.Flags().BoolP("webhook-enable", "w", true, "Expose endpoint to trigger memes")
+	viper.BindPFlag("webhook_enable", rootCmd.Flags().Lookup("webhook-enable"))
+
+	rootCmd.Flags().String("webhook-username", "", "(Basic Auth) forces basic authentication for webhook")
+	viper.BindPFlag("webhook_username", rootCmd.Flags().Lookup("webhook-username"))
+
+	rootCmd.Flags().String("webhook-password", "", "(Basic Auth) forces basic authentication for webhook")
+	viper.BindPFlag("webhook_password", rootCmd.Flags().Lookup("webhook-password"))
 }
 
 func initViperEnvConfig() {
@@ -109,7 +118,9 @@ func runApp(cmd *cobra.Command, args []string) {
 		MainChannel:       urlChan,
 		DisplayTimePeriod: displayTimeDuration,
 	}
-	httpConf.Webhook.Enabled = true
+	httpConf.Webhook.Enabled = viper.GetBool("webhook_enable")
+	httpConf.Webhook.Username = viper.GetString("webhook_username")
+	httpConf.Webhook.Password = viper.GetString("webhook_password")
 
 	http.SetPkgConfig(httpConf)
 
