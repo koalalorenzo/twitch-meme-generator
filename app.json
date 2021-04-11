@@ -15,7 +15,7 @@
   "env": {
     "KTMG_CHANNEL": {
       "description": "Name of the Twitch channel to monitor",
-      "value": "koalalorenzo",
+      "value": "koalalorenzo"
     },
     "KTMG_DISPLAY_TIME": {
       "description": "The amount of time an image should appear",
@@ -36,8 +36,7 @@
       "required": false
     }
   },
-  "buildpacks": [
-    {
+  "buildpacks": [{
       "url": "https://github.com/raxod502/heroku-buildpack-git-lfs.git"
     },
     {
