@@ -40,7 +40,11 @@
       "value": "git@gitlab.com:koalalorenzo/twitch-meme-generator.git"
     }
   },
-  "buildpacks": [{
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-ssh-key.git"
+    },
+    {
       "url": "https://github.com/raxod502/heroku-buildpack-git-lfs.git"
     },
     {
