@@ -11,6 +11,11 @@ import (
 
 var homeTempl *template.Template
 
+func init() {
+	// Prepare the HTML template
+	homeTempl = template.Must(template.New("").Parse(homeHTML))
+}
+
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	logWF := log.WithFields(log.Fields{
 		"f":          "http.serveHome",

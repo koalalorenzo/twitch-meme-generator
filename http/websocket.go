@@ -25,9 +25,6 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
-
-	// Time in between memes to avoid flooding
-	displayTimePeriod = 10 * time.Second
 )
 
 func reader(ws *websocket.Conn) {
@@ -69,7 +66,7 @@ func writer(ws *websocket.Conn, msgChan chan string) {
 
 			// This should not make possible to have other memes untill this one
 			// disappears.
-			time.Sleep(displayTimePeriod)
+			time.Sleep(conf.DisplayTimePeriod)
 			// Sending an empty message to make the image disappear
 			ws.SetWriteDeadline(time.Now().Add(writeWait))
 			err = ws.WriteMessage(websocket.TextMessage, []byte{})
@@ -92,7 +89,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		"URI":        r.RequestURI,
 	})
 
-	log.Infof("New WebSocket connection")
+	logWF.Infof("New WebSocket connection")
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		if _, ok := err.(websocket.HandshakeError); !ok {

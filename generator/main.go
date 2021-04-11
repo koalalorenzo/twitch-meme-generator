@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"strconv"
 	"strings"
 	"time"
 
@@ -35,7 +34,7 @@ func SetPkgConfig(ch chan string, assetPath string) {
 	urlChan = ch
 	assetsDirPath = assetPath
 
-	MemeFiles = &[]string{}
+	MemeFiles = []*MemeFile{}
 	tickerFilesLiveLoade()
 	ticker := time.NewTicker(5 * time.Second)
 	go func() {
@@ -53,30 +52,29 @@ func GenerateMeme(kind, text string) {
 		"text": text,
 	})
 
-	// TODO: DO IT
 	logWF.Infof(`Generating...`)
 
 	memeCfg := gomeme.NewConfig()
 	memeCfg.BottomText = text
 
-	var fontSizeStr string
-	var fileName string
-	var fileExtension string
-	for _, mfn := range *MemeFiles {
-		if strings.HasPrefix(mfn, kind) {
-			fileName = fmt.Sprintf("assets/%s", mfn)
-			// Get the font size from the fileName
-			fontSizeStr = strings.Split(mfn, ".")[1]
-			fileExtension = strings.Split(mfn, ".")[2]
+	memeFile := &MemeFile{}
+	for _, m := range MemeFiles {
+		if strings.HasPrefix(m.Kind, kind) {
+			memeFile = m
 			break
 		}
 	}
 
+	if memeFile.Filename == "" {
+		logWF.Warn("Meme kind not found")
+		return
+	}
+
 	// Updating the logs with relevant extra Fields
 	logWF = logWF.WithFields(log.Fields{
-		"fontSize":      fontSizeStr,
-		"fileName":      fileName,
-		"fileExtension": fileExtension,
+		"fontSize":      memeFile.FontSize,
+		"fileName":      memeFile.Filename,
+		"fileExtension": memeFile.Extension,
 	})
 
 	// Generating a "predictable output file name" so that we can cache images
@@ -84,7 +82,7 @@ func GenerateMeme(kind, text string) {
 	h := sha1.New()
 	h.Write([]byte(kind + text))
 	hashFileName := base64.URLEncoding.EncodeToString(h.Sum(nil))
-	hashFileName = fmt.Sprintf("./%s.%s", hashFileName, fileExtension)
+	hashFileName = fmt.Sprintf("./%s.%s", hashFileName, memeFile.Extension)
 	outputFile := path.Join(OutputTempDir, hashFileName)
 
 	if _, err := os.Stat(outputFile); !os.IsNotExist(err) {
@@ -94,23 +92,18 @@ func GenerateMeme(kind, text string) {
 	}
 
 	// Ensuring that the font size is the one specified after the  first dot
-	fontSize, err := strconv.ParseFloat(fontSizeStr, 64)
-	if err != nil {
-		logWF.Warnf("Error defining the fontSize: %s", err.Error())
-		return
-	}
-	memeCfg.FontSize = fontSize
+	memeCfg.FontSize = memeFile.FontSize
 	meme := &gomeme.Meme{
 		Config: memeCfg,
 	}
 
-	memeFile, err := ioutil.ReadFile(fileName)
+	mof, err := ioutil.ReadFile(memeFile.Filename)
 	if err != nil {
-		logWF.Warn("Error Opening %s: %s", fileName, err.Error())
+		logWF.Warn("Error Opening %s: %s", memeFile.Filename, err.Error())
 		return
 	}
 
-	meme.Memeable, err = detectFileType(memeFile)
+	meme.Memeable, err = detectFileType(mof)
 	if err != nil {
 		logWF.Warnf("Error making meme meemable: %s", err.Error())
 		return
