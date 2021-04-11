@@ -58,7 +58,7 @@ func init() {
 	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
 	viper.BindPFlag("display_time", rootCmd.Flags().Lookup("display-time"))
 
-	rootCmd.Flags().BoolP("webhook-enable", "w", true, "Expose endpoint to trigger memes")
+	rootCmd.Flags().BoolP("webhook-enable", "w", false, "Expose endpoint to trigger memes")
 	viper.BindPFlag("webhook_enable", rootCmd.Flags().Lookup("webhook-enable"))
 
 	rootCmd.Flags().String("webhook-username", "", "(Basic Auth) forces basic authentication for webhook")
