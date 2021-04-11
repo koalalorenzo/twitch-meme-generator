@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	twitch "github.com/gempir/go-twitch-irc/v2"
+	log "github.com/sirupsen/logrus"
 
 	"gitlab.com/koalalorenzo/twitch-meme-generator/generator"
 )
@@ -13,6 +14,15 @@ const (
 )
 
 func parser(msg twitch.PrivateMessage) {
+	logWF := log.WithFields(log.Fields{
+		"f":                "twitch.parser",
+		"user.displayName": msg.User.DisplayName,
+		"user.ID":          msg.User.ID,
+		"type":             msg.RawType,
+		"msg":              msg.Message,
+	})
+
+	logWF.Debug("Parsing...")
 	if !strings.HasPrefix(msg.Message, BotCommandPrefix) {
 		return
 	}

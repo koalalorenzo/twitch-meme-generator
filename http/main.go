@@ -44,11 +44,13 @@ func StartServer(addr string) {
 	// Prepare a router for Webhook
 	whr := mux.NewRouter()
 	if conf.Webhook.Enabled {
+		logWF.Debug("WebHook enabled")
 		whr.Methods(http.MethodPost).HandlerFunc(serveWebHook)
 	}
 
 	// If Username & Password were passed then check basic auth against them
 	if conf.Webhook.Username != "" && conf.Webhook.Password != "" {
+		logWF.Debug("WebHook has basic http authentication enabled")
 		whr.Use(func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				user, pass, ok := r.BasicAuth()
@@ -60,6 +62,8 @@ func StartServer(addr string) {
 				next.ServeHTTP(w, r)
 			})
 		})
+	} else {
+		logWF.Warn("WebHook does not have basic authentication enabled")
 	}
 
 	// setting main router
