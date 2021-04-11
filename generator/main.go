@@ -52,7 +52,6 @@ func GenerateMeme(kind, text string) {
 		"text": text,
 	})
 
-	// TODO: DO IT
 	logWF.Infof(`Generating...`)
 
 	memeCfg := gomeme.NewConfig()
