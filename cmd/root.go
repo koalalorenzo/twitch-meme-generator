@@ -104,7 +104,14 @@ func runApp(cmd *cobra.Command, args []string) {
 	displayTimeDuration := viper.GetDuration("display_time")
 
 	generator.SetPkgConfig(urlChan, assetsDirPath)
-	http.SetPkgConfig(urlChan, displayTimeDuration)
+
+	httpConf := &http.Config{
+		MainChannel:       urlChan,
+		DisplayTimePeriod: displayTimeDuration,
+	}
+	httpConf.Webhook.Enabled = true
+
+	http.SetPkgConfig(httpConf)
 
 	// Start listening for messages
 	go twitch.StartTwitchListner(twitchChannelName)
