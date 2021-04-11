@@ -20,8 +20,28 @@
     "KTMG_DISPLAY_TIME": {
       "description": "The amount of time an image should appear",
       "value": "10s"
+    },
+    "KTMG_WEBHOOK_ENABLE": {
+      "description": "Enable HTTP endpoint to queue memes. Use for custom integartion or manual tests.",
+      "value": "false"
+    },
+    "KTMG_WEBHOOK_USERNAME": {
+      "description": "(optional) Set the username for basic authentication. Leave empty to disable WebHook authentication",
+      "value": ""
+    },
+    "KTMG_WEBHOOK_PASSWORD": {
+      "description": "(optional) Set the password for basic authentication. Leave empty to disable WebHook authentication",
+      "value": ""
     }
   },
+  "buildpacks": [
+    {
+      "url": "https://github.com/raxod502/heroku-buildpack-git-lfs.git"
+    },
+    {
+      "url": "heroku/go"
+    }
+  ],
   "formation": {
     "web": {
       "quantity": 1,
