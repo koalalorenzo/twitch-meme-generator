@@ -34,6 +34,10 @@
       "description": "(optional) Set the password for basic authentication. Leave empty to disable WebHook authentication",
       "generator": "secret",
       "required": false
+    },
+    "HEROKU_BUILDPACK_GIT_LFS_REPO": {
+      "description": "Git LFS repository. Leve default if you don't know what this is",
+      "value": "git@gitlab.com:koalalorenzo/twitch-meme-generator.git"
     }
   },
   "buildpacks": [{
