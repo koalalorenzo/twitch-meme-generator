@@ -11,7 +11,10 @@ RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -a -o /app
 
 FROM scratch
 
+# Ensuring that generate images are cached in a temporary volume
 VOLUME /tmp
+ENV KTMG_TEMP_PATH="/tmp"
+
 VOLUME /assets
 
 COPY ./assets /assets

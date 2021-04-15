@@ -22,17 +22,10 @@ var (
 	urlChan chan string
 )
 
-func init() {
-	var err error
-	OutputTempDir, err = os.MkdirTemp(os.TempDir(), "meme-generator")
-	if err != nil {
-		log.Errorf("Error creating temp dir: %s", err.Error())
-	}
-}
-
-func SetPkgConfig(ch chan string, assetPath string) {
+func SetPkgConfig(ch chan string, assetPath, tempPath string) {
 	urlChan = ch
 	assetsDirPath = assetPath
+	OutputTempDir = tempPath
 
 	MemeFiles = []*MemeFile{}
 	tickerFilesLiveLoade()
