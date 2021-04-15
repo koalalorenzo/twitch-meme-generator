@@ -1,21 +1,25 @@
 FROM golang:1.16-alpine as base
-WORKDIR /src
 
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /src
 COPY go.mod go.sum .
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 go build -a -o /app
+RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -a -o /app
 
-FROM alpine
-RUN apk --no-cache add ca-certificates
+FROM scratch
 
+VOLUME /tmp
 VOLUME /assets
+
 COPY ./assets /assets
-COPY --from=base /app /app 
+COPY --from=base /etc/ssl/certs /etc/ssl/certs
+COPY --from=base /app /app
 
 ENV PORT=8005
 EXPOSE 8005
 
-ENTRYPOINT "/app"
-CMD ""
+ENTRYPOINT ["/app"]
+CMD []
