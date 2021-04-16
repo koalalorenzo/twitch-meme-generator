@@ -3,6 +3,9 @@ image: docker
 services:
   - docker:dind
 
+before_script:
+  - apk --no-cache add git make ca-certificates
+
 stages:
   - build
   - release
