@@ -1,0 +1,28 @@
+image: docker
+
+service:
+  - docker:dind
+
+stages:
+  - build
+  - release
+
+docker:build:
+  stage: build
+  shell:
+    - make docker_build
+
+docker:push:master:
+  stage: release
+  shell:
+    - make docker_push
+  only:
+    - master
+
+docker:push:tag:
+  stage: release
+  shell:
+    - make docker_push -e DOCKER_TAG=latest
+    - make docker_push -e DOCKER_TAG=$CI_COMMIT_TAG
+  only:
+    - tags

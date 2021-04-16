@@ -27,10 +27,10 @@ clean:
 .PHONY: clean
 
 #### Docker targets
-build_docker:
+docker_build:
 	docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-.PHONY: build_docker
+.PHONY: docker_build
 
-push_docker: build_docker
+docker_push: docker_build
 	docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
-.PHONY: push_docker
+.PHONY: docker_push
