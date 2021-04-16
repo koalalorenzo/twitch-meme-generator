@@ -155,3 +155,20 @@ characters in the name might help)
 
 **Important**: Due to security restrictions on some browser, using HTTP instead
 of HTTPs in the OBS Browser Source URL will fix connectivity issues.
+
+## Docker usage
+It is possible to run Lorenzo's Twitch Bot meme generator using Docker.
+The docker image is downloadable from 
+[the project GitLab Docker Registry](https://gitlab.com/koalalorenzo/twitch-meme-generator/container_registry)
+
+You can use both env variables as well as command line to configure the app:
+
+```bash
+docker run -p 8005:8005 registry.gitlab.com/koalalorenzo/twitch-meme-generator:latest
+```
+
+You can also mount the temporary directory (under path `/tmp`) to save the cache
+of generated memes, this will speed up future requests.
+
+You can mount the `/assets` path to a custom directory path where you can drop
+the images that will be used as base for the memes.

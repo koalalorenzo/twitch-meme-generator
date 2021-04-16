@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 	"strings"
 
@@ -43,7 +44,13 @@ func runGenerate(cmd *cobra.Command, args []string) {
 	memeKind := args[0]
 	phrase := strings.Join(args[1:], " ")
 
-	generator.SetPkgConfig(urlChan, assetsDirPath)
+	outputdir, err := os.MkdirTemp(os.TempDir(), "meme-generator")
+	if err != nil {
+		log.Errorf("Error creating temp dir: %s", err.Error())
+		return
+	}
+
+	generator.SetPkgConfig(urlChan, assetsDirPath, outputdir)
 	go generator.GenerateMeme(memeKind, phrase)
 
 	// Copy the file here, wait for the file to be generated

@@ -1,0 +1,32 @@
+image: docker
+
+services:
+  - docker:dind
+
+before_script:
+  - apk --no-cache add git make ca-certificates
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+stages:
+  - build
+  - release
+
+docker:build:
+  stage: build
+  script:
+    - make docker_build
+
+docker:push:master:
+  stage: release
+  script:
+    - make docker_push
+  only:
+    - master
+
+docker:push:tag:
+  stage: release
+  script:
+    - make docker_push -e DOCKER_TAG=latest
+    - make docker_push -e DOCKER_TAG=$CI_COMMIT_TAG
+  only:
+    - tags

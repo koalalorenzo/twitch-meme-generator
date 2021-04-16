@@ -58,6 +58,9 @@ func init() {
 	rootCmd.Flags().DurationP("display-time", "d", 10*time.Second, "The time a meme is displayed on screen")
 	viper.BindPFlag("display_time", rootCmd.Flags().Lookup("display-time"))
 
+	rootCmd.Flags().String("temp-path", "", "Specify a custom temporary dir path")
+	viper.BindPFlag("temp_path", rootCmd.Flags().Lookup("temp-path"))
+
 	rootCmd.Flags().BoolP("webhook-enable", "w", false, "Expose endpoint to trigger memes")
 	viper.BindPFlag("webhook_enable", rootCmd.Flags().Lookup("webhook-enable"))
 
@@ -111,8 +114,18 @@ func runApp(cmd *cobra.Command, args []string) {
 	port := viper.GetString("port")
 	assetsDirPath := viper.GetString("assets")
 	displayTimeDuration := viper.GetDuration("display_time")
+	outputdir := viper.GetString("temp_path")
 
-	generator.SetPkgConfig(urlChan, assetsDirPath)
+	if outputdir == "" {
+		var err error
+		outputdir, err = os.MkdirTemp(os.TempDir(), "meme-generator")
+		if err != nil {
+			log.Errorf("Error creating temp dir: %s", err.Error())
+			return
+		}
+	}
+
+	generator.SetPkgConfig(urlChan, assetsDirPath, outputdir)
 
 	httpConf := &http.Config{
 		MainChannel:       urlChan,

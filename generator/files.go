@@ -16,6 +16,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// PermittedFileExtension contaisn the extension that are allowed to use
+var PermittedFileExtension = []string{
+	".gif",
+	".jpg",
+	".jpeg",
+	".png",
+}
+
 // MemeFiles these are the file names of the memes available from the bot
 var MemeFiles []*MemeFile
 
@@ -46,7 +54,23 @@ func getMemesFilesData() (l []*MemeFile, err error) {
 		if file.IsDir() {
 			continue
 		}
+
 		mfn := file.Name()
+
+		// Ensure that we check only images and gifs formats
+		isExtValid := false
+		for _, ext := range PermittedFileExtension {
+			if strings.HasSuffix(mfn, ext) {
+				isExtValid = true
+				break
+			}
+		}
+
+		// Go to the next file if the extension is not allowed
+		if !isExtValid {
+			continue
+		}
+
 		logWF = logWF.WithField("file", mfn)
 
 		mfsp := strings.Split(mfn, ".")
