@@ -3,10 +3,10 @@ FROM golang:1.16-alpine as base
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /src
-COPY go.mod go.sum .
+COPY go.mod go.sum /src/
 RUN go mod download
 
-COPY . .
+COPY . /src/
 RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -a -o /app
 
 FROM scratch
