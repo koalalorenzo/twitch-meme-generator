@@ -16,12 +16,12 @@ docker:build:
   script:
     - make docker_build
 
-docker:push:master:
+docker:push:main:
   stage: release
   script:
     - make docker_push
   only:
-    - master
+    - main
 
 docker:push:tag:
   stage: release
