@@ -9,19 +9,19 @@ stages:
 
 docker:build:
   stage: build
-  shell:
+  script:
     - make docker_build
 
 docker:push:master:
   stage: release
-  shell:
+  script:
     - make docker_push
   only:
     - master
 
 docker:push:tag:
   stage: release
-  shell:
+  script:
     - make docker_push -e DOCKER_TAG=latest
     - make docker_push -e DOCKER_TAG=$CI_COMMIT_TAG
   only:
