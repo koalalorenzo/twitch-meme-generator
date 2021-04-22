@@ -36,7 +36,7 @@ type MemeFile struct {
 
 var (
 	// This is the path where we store all the images.
-	assetsDirPath string
+	AssetsDirPath string
 )
 
 func getMemesFilesData() (l []*MemeFile, err error) {
@@ -45,7 +45,7 @@ func getMemesFilesData() (l []*MemeFile, err error) {
 	})
 
 	l = []*MemeFile{}
-	files, err := os.ReadDir(assetsDirPath)
+	files, err := os.ReadDir(AssetsDirPath)
 	if err != nil {
 		return []*MemeFile{}, err
 	}
@@ -100,7 +100,7 @@ func getMemesFilesData() (l []*MemeFile, err error) {
 func tickerFilesLiveLoade() {
 	logWF := log.WithFields(log.Fields{
 		"f":      "generator.tickerFilesLiveLoade",
-		"assets": assetsDirPath,
+		"assets": AssetsDirPath,
 	})
 
 	mfs, err := getMemesFilesData()

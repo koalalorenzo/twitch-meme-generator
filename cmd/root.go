@@ -129,8 +129,10 @@ func runApp(cmd *cobra.Command, args []string) {
 
 	httpConf := &http.Config{
 		MainChannel:       urlChan,
+		ChannelName:       twitchChannelName,
 		DisplayTimePeriod: displayTimeDuration,
 	}
+
 	httpConf.Webhook.Enabled = viper.GetBool("webhook_enable")
 	httpConf.Webhook.Username = viper.GetString("webhook_username")
 	httpConf.Webhook.Password = viper.GetString("webhook_password")
