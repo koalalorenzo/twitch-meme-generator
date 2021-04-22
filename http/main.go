@@ -15,6 +15,7 @@ import (
 
 type Config struct {
 	MainChannel       chan string
+	ChannelName       string
 	DisplayTimePeriod time.Duration
 	Webhook           struct {
 		Enabled  bool
@@ -72,8 +73,14 @@ func StartServer(addr string) {
 	sfHandler := http.FileServer(http.Dir(generator.OutputTempDir))
 	staticHandler := http.StripPrefix("/static/", sfHandler)
 	r.PathPrefix("/static/").Handler(staticHandler)
+
+	assfHandler := http.FileServer(http.Dir(generator.AssetsDirPath))
+	assHandler := http.StripPrefix("/assets/", assfHandler)
+	r.PathPrefix("/assets/").Handler(assHandler)
+
 	r.PathPrefix("/ws").HandlerFunc(serveWs)
 	r.PathPrefix("/wh").Handler(whr)
+	r.PathPrefix("/list").HandlerFunc(serveListMeme)
 	r.PathPrefix("/").HandlerFunc(serveHome)
 
 	srv := &http.Server{
