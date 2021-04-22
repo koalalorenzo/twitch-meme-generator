@@ -24,7 +24,7 @@ var (
 
 func SetPkgConfig(ch chan string, assetPath, tempPath string) {
 	urlChan = ch
-	assetsDirPath = assetPath
+	AssetsDirPath = assetPath
 	OutputTempDir = tempPath
 
 	MemeFiles = []*MemeFile{}
