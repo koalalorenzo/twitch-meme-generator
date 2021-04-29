@@ -1,10 +1,15 @@
 package twitch
 
 import (
+	"time"
+
 	log "github.com/sirupsen/logrus"
 
 	twitch "github.com/gempir/go-twitch-irc/v2"
 )
+
+var Client *twitch.Client
+var ClientIsConnected = false
 
 // StartTwitchListner
 func StartTwitchListner(channel string) {
@@ -13,17 +18,20 @@ func StartTwitchListner(channel string) {
 		"channel": channel,
 	})
 
-	client := twitch.NewAnonymousClient()
+	Client = twitch.NewAnonymousClient()
+	Client.IdlePingInterval = 20 * time.Second
+	Client.SendPings = true
 
-	client.OnPrivateMessage(parser)
-	client.OnConnect(func() {
+	Client.OnPrivateMessage(parser)
+	Client.OnConnect(func() {
 		logWF.Info("Twitch Client Connected")
+		ClientIsConnected = true
 	})
 
-	client.Join(channel)
+	Client.Join(channel)
 
 	logWF.Debug("Twitch Client Connecting")
-	err := client.Connect()
+	err := Client.Connect()
 	if err != nil {
 		panic(err)
 	}

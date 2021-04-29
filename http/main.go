@@ -83,6 +83,9 @@ func StartServer(addr string) {
 	r.Path("/sv").HandlerFunc(serveStreamView)
 	r.Path("/").HandlerFunc(serveListMeme)
 
+	r.Path("/hc/live").HandlerFunc(healthLiveness)
+	r.Path("/hc/ready").HandlerFunc(healthReady)
+
 	r.NotFoundHandler = http.RedirectHandler("/", http.StatusTemporaryRedirect)
 
 	srv := &http.Server{
