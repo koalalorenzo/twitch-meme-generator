@@ -78,10 +78,12 @@ func StartServer(addr string) {
 	assHandler := http.StripPrefix("/assets/", assfHandler)
 	r.PathPrefix("/assets/").Handler(assHandler)
 
-	r.PathPrefix("/ws").HandlerFunc(serveWs)
-	r.PathPrefix("/wh").Handler(whr)
-	r.PathPrefix("/list").HandlerFunc(serveListMeme)
-	r.PathPrefix("/").HandlerFunc(serveHome)
+	r.Path("/ws").HandlerFunc(serveWs)
+	r.Path("/wh").Handler(whr)
+	r.Path("/sv").HandlerFunc(serveStreamView)
+	r.Path("/").HandlerFunc(serveListMeme)
+
+	r.NotFoundHandler = http.RedirectHandler("/", http.StatusTemporaryRedirect)
 
 	srv := &http.Server{
 		Handler: r,

@@ -30,9 +30,11 @@ func serveListMeme(w http.ResponseWriter, r *http.Request) {
 	var v = struct {
 		ChannelName string
 		Images      []*generator.MemeFile
+		Host        string
 	}{
 		conf.ChannelName,
 		generator.MemeFiles,
+		r.Host,
 	}
 
 	logWF.Infof("")
@@ -66,6 +68,11 @@ const listHTML = `
               Writing this in the chat channel will generate a new image of kind
               <code>NAME</code>,inserting the text
               <code>WRITE YOUR SENTENCE HERE</code> at the bottom  of the picture.
+            </p>
+            <p>
+              If you are the streamer, you should add 
+              <a href="http://{{ .Host }}/sv" target="_blank">this page</a> as a 
+              browser source on your OBS setup.
             </p>
             <p>
               <a class="mui-btn mui-btn--raised mui-btn--primary" href="http://twitch.tv/{{ .ChannelName }}">

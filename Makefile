@@ -16,7 +16,7 @@ build:
 	cp -R ./assets ./build/assets
 
 run:
-	go run ./*.go
+	go run ./*.go --webhook-enable
 .PHONY: run
 
 install:
