@@ -52,7 +52,7 @@ to use:
 - Width: 800
 - Height: 600
 
-By default this url will be [http://localhost:8000/](http://localhost:8000/).
+By default this url will be [http://localhost:8000/sv](http://localhost:8000/sv).
 If you are running on a different platform like Heroku or DigitalOcean please
 use the URL provided by those platforms.
 
