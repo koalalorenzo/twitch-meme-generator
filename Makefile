@@ -12,15 +12,15 @@ endif
 .EXPORT_ALL_VARIABLES:
 
 build:
-	go build -o build/koalalorenzo-meme-generator 
+	go build -o build/koalalorenzo-meme-generator
 	cp -R ./assets ./build/assets
 
 run:
-	go run ./*.go 
+	go run ./*.go
 .PHONY: run
 
 install:
-	go install 
+	go install
 
 clean:
 	rm -rf build
