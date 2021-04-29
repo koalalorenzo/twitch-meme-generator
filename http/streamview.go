@@ -62,37 +62,57 @@ const streamViewHTML = `<!DOCTYPE html>
     <body>
         <script type="text/javascript">
             (function() {
-								var conn;
-							  var body = document.body;
-								body.style.height = window.innerHeight - 50 + "px";
-								body.style.height = window.innerHeight - 50 + "px";
+								window.ktmg = {};
+								window.ktmg.conn = null;
+								window.ktmg.refreshTimer = null;
+								document.body.style.height = window.innerHeight - 50 + "px";
 
 								function setImage(url) {
 									// Clear the image if empty
 									if(url === "") {
-										body.style.backgroundImage = "";
+										document.body.style.backgroundImage = "";
+
+										// Start a timer that will restart the connection
+										refreshTimer = setTimeout(function(){
+											console.log("Starting refreshTimer");
+											startWebSocket();
+										}, 90*1000);
+
 										return;
 									}
-									body.style.backgroundImage = 'url('+"http://{{.Host}}/static/" + url +')';
+
+									// if the backend is alive and a new image is there, do not 
+									// refresh the connection.
+									if (refreshTimer) {
+										clearTimeout(refreshTimer);
+										console.log("refreshTimer cleared");
+									}
+
+									document.body.style.backgroundImage = 'url('+"http://{{.Host}}/static/" + url +')';
 								}
 
 								function startWebSocket() {
 									console.log("Starting a new connection");
 									// Clean the image in case there is one showing...
 									setImage("");
-									var conn = new WebSocket("ws://{{.Host}}/ws?lastMod={{.LastMod}}");
+									if(window.ktmg.conn) {
+										window.ktmg.conn.close();
+									}
+
+									window.ktmg.conn = new WebSocket("ws://{{.Host}}/ws?lastMod={{.LastMod}}");
 									
-									conn.onclose = function(evt) {
+									window.ktmg.conn.onclose = function(evt) {
 										console.log("Connection closed... Reconnecting...")
 										setTimeout(function(){
 											startWebSocket();
-										}, 5000);
+										}, 2500);
 									}
 	
-									conn.onmessage = function(evt) {
+									window.ktmg.conn.onmessage = function(evt) {
 										console.log("Received new Image filename:", evt.data);
 										setImage(evt.data);
 									}
+									console.log("New connection started")
 								}
 
 								startWebSocket()
