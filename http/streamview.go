@@ -64,27 +64,12 @@ const streamViewHTML = `<!DOCTYPE html>
             (function() {
 								window.ktmg = {};
 								window.ktmg.conn = null;
-								window.ktmg.refreshTimer = null;
 								document.body.style.height = window.innerHeight - 50 + "px";
 
 								function setImage(url) {
-									// if the backend is alive and a new image is there, do not 
-									// refresh the connection.
-									if (window.ktmg.refreshTimer) {
-										clearTimeout(window.ktmg.refreshTimer);
-										console.log("refreshTimer cleared");
-									}
-
 									// Clear the image if empty
 									if(url === "") {
 										document.body.style.backgroundImage = "";
-
-										// Start a timer that will restart the connection
-										window.ktmg.refreshTimer = setTimeout(function(){
-											console.log("Starting refreshTimer");
-											startWebSocket();
-										}, 90*1000);
-
 										return;
 									}
 
