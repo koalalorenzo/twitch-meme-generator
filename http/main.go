@@ -80,8 +80,8 @@ func StartServer(addr string) {
 
 	r.PathPrefix("/ws").HandlerFunc(serveWs)
 	r.PathPrefix("/wh").Handler(whr)
-	r.PathPrefix("/list").HandlerFunc(serveListMeme)
-	r.PathPrefix("/").HandlerFunc(serveHome)
+	r.PathPrefix("/sv").HandlerFunc(serveStreamView)
+	r.PathPrefix("/").HandlerFunc(serveListMeme)
 
 	srv := &http.Server{
 		Handler: r,

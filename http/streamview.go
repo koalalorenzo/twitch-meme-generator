@@ -9,16 +9,16 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var homeTempl *template.Template
+var streamViewTempl *template.Template
 
 func init() {
 	// Prepare the HTML template
-	homeTempl = template.Must(template.New("").Parse(homeHTML))
+	streamViewTempl = template.Must(template.New("").Parse(streamViewHTML))
 }
 
-func serveHome(w http.ResponseWriter, r *http.Request) {
+func serveStreamView(w http.ResponseWriter, r *http.Request) {
 	logWF := log.WithFields(log.Fields{
-		"f":          "http.serveHome",
+		"f":          "http.serveStreamView",
 		"RemoteAddr": r.RemoteAddr,
 		// "Host":       r.Host,
 		"UserAgent": r.UserAgent(),
@@ -37,10 +37,10 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logWF.Infof("")
-	homeTempl.Execute(w, &v)
+	streamViewTempl.Execute(w, &v)
 }
 
-const homeHTML = `<!DOCTYPE html>
+const streamViewHTML = `<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>koalalorenzo's Twitch Meme Generator</title>
