@@ -1,13 +1,13 @@
-FROM golang:1.17-alpine as base
+FROM golang:1.17 as base
 
-RUN apk --no-cache add ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates
 
 WORKDIR /src
 COPY go.mod go.sum /src/
 RUN go mod download
 
 COPY . /src/
-RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -a -o /app
+RUN go build -ldflags '-extldflags "-static"' -a -o /app
 
 FROM scratch
 
