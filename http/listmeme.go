@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/json"
 	"net/http"
 	"text/template"
 
@@ -39,6 +40,29 @@ func serveListMeme(w http.ResponseWriter, r *http.Request) {
 
 	logWF.Infof("")
 	listTempl.Execute(w, &v)
+}
+
+func serveListMemeApi(w http.ResponseWriter, r *http.Request) {
+	logWF := log.WithFields(log.Fields{
+		"f":          "http.serveListMemeApi",
+		"RemoteAddr": r.RemoteAddr,
+		"UserAgent":  r.UserAgent(),
+		"URI":        r.RequestURI,
+	})
+
+	kinds := []string{}
+	for _, m := range generator.MemeFiles {
+		kinds = append(kinds, m.Kind)
+	}
+
+	res, err := json.Marshal(kinds)
+	if err != nil {
+		logWF.Error(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+	w.Write(res)
 }
 
 const listHTML = `

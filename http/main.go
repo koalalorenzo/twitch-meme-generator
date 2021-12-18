@@ -82,6 +82,7 @@ func StartServer(addr string) {
 	r.Path("/wh").Handler(whr)
 	r.Path("/sv").HandlerFunc(serveStreamView)
 	r.Path("/").HandlerFunc(serveListMeme)
+	r.Path("/list.json").HandlerFunc(serveListMemeApi)
 
 	r.Path("/hc/live").HandlerFunc(healthLiveness)
 	r.Path("/hc/ready").HandlerFunc(healthReady)
