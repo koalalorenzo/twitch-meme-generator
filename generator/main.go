@@ -12,7 +12,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/jpoz/gomeme"
+	"gitlab.com/koalalorenzo/gomeme"
 )
 
 var (

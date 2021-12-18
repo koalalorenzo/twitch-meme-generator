@@ -12,8 +12,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jpoz/gomeme"
+	"github.com/chai2010/webp"
 	log "github.com/sirupsen/logrus"
+	"gitlab.com/koalalorenzo/gomeme"
 )
 
 // PermittedFileExtension contaisn the extension that are allowed to use
@@ -22,6 +23,7 @@ var PermittedFileExtension = []string{
 	".jpg",
 	".jpeg",
 	".png",
+	".webp",
 }
 
 // MemeFiles these are the file names of the memes available from the bot
@@ -136,6 +138,13 @@ func detectFileType(in []byte) (n gomeme.Memeable, err error) {
 			return nil, err
 		}
 		return gomeme.PNG{p}, nil
+
+	case "image/webp":
+		p, err := webp.Decode(buff)
+		if err != nil {
+			return nil, err
+		}
+		return gomeme.WebP{p}, nil
 	}
 
 	return nil, errors.New("Unable to identify file type")
